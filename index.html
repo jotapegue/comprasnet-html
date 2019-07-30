@@ -1,0 +1,98 @@
+<!--
+    Desenvolvido por
+    João Pedro Figueira Garcia
+    email: pedro.garcia09@hotmail.com
+    github: http://github.com/jotapegue
+ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Consulta ao webservice do site governamental Compras Net">
+    <meta name="keywords" content="JavaScript, JQuery, ComprasNet, Compras net">
+    <meta name="author" content="João Pedro Garcia - pedro.garcia@hotmail.com">
+    <meta name="url" content="http://github.com/jotapegue">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>API::ComprasNet</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        body{
+            display: flex;
+            align-items: center;
+            justify-content: center; 
+            height: 100vh;
+        }
+
+        form{
+            text-align: center;
+        }
+
+        span{
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        ul{
+            margin: 0 0;
+            padding: 0 0;
+            text-align: left;
+            position: absolute;
+            width: 100%;
+            display: none;
+        }
+
+        li{
+            margin: 0 0;
+            padding: 0 0;
+            border: solid #cccc 0.5px;
+            list-style-type: none;
+            padding-left: 15px;
+            padding-top: 2px;
+            padding-bottom: 3px;
+        }
+
+        li:hover{
+            background-color: cadetblue;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="seach">
+        <form action="#" method="post" id="search_sales">
+            <h4>Digite o nome do produto desejado</h4>
+            <span>
+                <input type="text" name="descricao_item" id="descricao_item" class="form-control">
+                <ul id="results" style="height: 200px; overflow: auto"></ul>
+            </span>
+        </form>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script>
+        $('#descricao_item').keyup(function(){
+            let search = $('#descricao_item').val();
+            $.ajax({
+                url: `https://siasgnet-consultas.siasgnet.estaleiro.serpro.gov.br/api/v1/hint?hint=${search}`,
+                method: 'GET',
+            })
+            .done((data)=>{
+                $('#results').show()
+                results(data.data)
+            })
+            .fail()
+
+            function results(results) {
+                let li = ''
+                results.forEach(result => {
+                    li += `<li>${result.descricao}</li>`
+                });
+                $('#results').html(li)
+            }
+        });
+    </script>
+</body>
+</html>
